@@ -1,8 +1,7 @@
 package org.example;
 
 import org.example.game.ChessGame;
-import org.example.game.bots.Bot;
-import org.example.game.bots.BotDumbCapture;
+import org.example.game.bots.*;
 import org.example.game.display.Display;
 import org.example.game.entities.Team;
 import org.example.game.exceptions.GameOverException;
@@ -10,7 +9,7 @@ import org.example.game.exceptions.GameOverException;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
-        doGames();
+        playOneGame();
 
     }
 
@@ -21,8 +20,8 @@ public class Main {
     public static void doGames(){
         for(int i=0;i<100;i++){
             ChessGame game = new ChessGame();
-            Bot white = new BotDumbCapture(game,Team.WHITE);
-            Bot black = new BotDumbCapture(game,Team.BLACK);
+            Bot white = new BotAlphaBeta(game,Team.WHITE,5);
+            Bot black = new BotAlphaBeta(game,Team.BLACK,3);
 
             int cmpt = 0;
 
@@ -42,8 +41,8 @@ public class Main {
     public static void playOneGame(){
         ChessGame game = new ChessGame();
         Display display = new Display(game);
-        Bot white = new BotDumbCapture(game,Team.WHITE,6756455131300L);
-        Bot black = new BotDumbCapture(game,Team.BLACK,6756455132200L);
+        Bot white = new BotAlphaBeta(game,Team.WHITE,5);
+        Bot black = new BotAlphaBeta(game,Team.BLACK,3);
 
         while(true){
             try{
