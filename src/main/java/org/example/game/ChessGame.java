@@ -7,8 +7,10 @@ import org.example.game.gamestate.GameState;
 import org.example.game.ruleset.MoveGenerator;
 import org.example.game.ruleset.RuleValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ChessGame implements Game {
 
@@ -85,6 +87,13 @@ public class ChessGame implements Game {
         return ruleValidator.getLegalMoves(pos);
     }
 
+    public List<Move> getAllLegalMoves(Team team){
+        List<Position> pieces = getPieces(team).stream().map(Piece::getPosition).toList();
+        List<Move> allMoves = new ArrayList<>();
+        pieces.forEach(pos -> allMoves.addAll(getLegalMoves(pos)));
+        return allMoves;
+    }
+
     public boolean isGameOver() {
         return isCheckMate(Team.BLACK)
                 || isCheckMate(Team.WHITE)
@@ -102,6 +111,7 @@ public class ChessGame implements Game {
     public List<Position> getLegalMovesPos(Position pos){
         return getLegalMoves(pos).stream().map(Move::to).toList();
     }
+
 
     public Team winner() {
         boolean whiteMate = isCheckMate(Team.WHITE);
@@ -169,7 +179,4 @@ public class ChessGame implements Game {
         return gameState.getBoard().getPieces(team);
     }
 
-    public List<Move> getFutureMove(Move move){
-        return gameState.getFutureMove(move,ruleValidator);
-    }
 }

@@ -2,7 +2,7 @@ package org.example.game.entities;
 
 public enum PieceType {
 
-    KING("K",1000),
+    KING("K",0),
     QUEEN("Q",9),
     BISHOP("B",3),
     ROOK("R",5),

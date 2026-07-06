@@ -43,14 +43,10 @@ public class BotDumb implements Bot {
 
         Move move = allMoves.get(rand.nextInt(allMoves.size()));
 
-        try {
-            if (move.moveType() == MoveType.PROMOTION) {
-                game.movePromotion(move.from(), move.to(), PieceType.QUEEN);
-            } else {
-                game.move(move.from(), move.to());
-            }
-        } catch (IllegalMoveException e) {
-            play();
+        if (move.moveType() == MoveType.PROMOTION) {
+            game.movePromotion(move.from(), move.to(), PieceType.QUEEN);
+        } else {
+            game.move(move.from(), move.to());
         }
 
     }

@@ -2,11 +2,10 @@ package org.example.game.gamestate;
 
 import org.example.game.entities.*;
 import org.example.game.ruleset.MoveGenerator;
-import org.example.game.ruleset.RuleValidator;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.function.IntFunction;
 import java.util.function.Supplier;
 
 public class GameState {
@@ -150,14 +149,19 @@ public class GameState {
         }
     }
 
+    public <T> T simulate(Move move, int n, IntFunction<T> action){
+        move(move);
+        try {
+            return action.apply(n);
+        } finally {
+            undo();
+        }
+    }
+
 
 
     public boolean leavesKingInCheck(Move move, Team team, MoveGenerator moveGenerator){
         return simulate(move, () -> moveGenerator.computeIfKingInCheck(team));
-    }
-
-    public List<Move> getFutureMove(Move move, RuleValidator ruleValidator){
-        return simulate(move, () -> ruleValidator.getLegalMoves(move.to()));
     }
 
     public void refreshKingCheckStatut(MoveGenerator moveGenerator){
