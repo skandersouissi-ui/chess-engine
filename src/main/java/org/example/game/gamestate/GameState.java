@@ -34,6 +34,16 @@ public class GameState {
         zobristHash = new ZobristHash(this);
     }
 
+    public GameState(Board board){
+        this.board = board;
+        moveStack = new Stack<>();
+        savedNbMoves = new Stack<>();
+        whiteKing = Position.of("e1");
+        blackKing = Position.of("e8");
+        currentTeam = Team.WHITE;
+        zobristHash = new ZobristHash(this);
+    }
+
     public boolean isMoveStackEmpty(){
         return moveStack.isEmpty();
     }

@@ -3,14 +3,20 @@ package org.example;
 import org.example.game.ChessGame;
 import org.example.game.bots.*;
 import org.example.game.display.Display;
+import org.example.game.entities.Piece;
+import org.example.game.entities.PieceType;
+import org.example.game.entities.Position;
 import org.example.game.entities.Team;
 import org.example.game.exceptions.GameOverException;
+import org.example.game.gamestate.Board;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         playOneGame();
-
     }
 
     public static void print(Object o){
@@ -20,8 +26,8 @@ public class Main {
     public static void doGames(){
         for(int i=0;i<100;i++){
             ChessGame game = new ChessGame();
-            Bot white = new BotAlphaBeta(game,Team.WHITE,5);
-            Bot black = new BotAlphaBeta(game,Team.BLACK,3);
+            Bot white = new BotAlphaBeta(game,Team.WHITE,3,10301645135800L);
+            Bot black = new BotDumbCapture(game,Team.BLACK,10301645137500L);
 
             int cmpt = 0;
 
@@ -39,10 +45,12 @@ public class Main {
     }
 
     public static void playOneGame(){
+
+
         ChessGame game = new ChessGame();
         Display display = new Display(game);
-        Bot white = new BotAlphaBeta(game,Team.WHITE,5);
-        Bot black = new BotAlphaBeta(game,Team.BLACK,3);
+        Bot black = new BotDumbCapture(game,Team.BLACK,5);
+        Bot white = new BotAlphaBeta2(game,Team.WHITE,6);
 
         while(true){
             try{

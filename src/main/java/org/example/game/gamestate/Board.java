@@ -3,17 +3,24 @@ package org.example.game.gamestate;
 import org.example.game.entities.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Board {
 
+    List<Piece> wPieces = new ArrayList<>();
+    List<Piece> bPieces = new ArrayList<>();
     private final Map<Position, Piece> board;
-
 
     public Board() {
         board = new HashMap<>();
         initEmptyBoard();
         placePieces();
+
+    }
+
+    public Board(Map<Position, Piece> b) {
+        board = new HashMap<>();
+        initEmptyBoard();
+        board.putAll(b);
     }
 
 
@@ -34,6 +41,11 @@ public class Board {
                 Piece piece = createPiece(pos);
 
                 if (piece != null) {
+                    if(piece.getTeam()==Team.WHITE){
+                        wPieces.add(piece);
+                    }else{
+                        bPieces.add(piece);
+                    }
                     board.put(pos, piece);
                 }
             }
@@ -77,30 +89,31 @@ public class Board {
     }
 
 
-    public void applyMove(Position from,Position to) {
-
+    public void applyMove(Position from, Position to) {
         Piece piece = board.get(from);
+        Piece captured = board.get(to);
 
-        board.put(from, null);
-
-        piece.setPosition(to);
-        piece.setMovedStatue(true);
-
-        board.put(to, piece);
-
-    }
-
-    public void applyUndo(Position from,Position to,boolean moved,Piece capturedPiece) {
-
-        Piece piece = board.get(to);
-        this.board.put(from,piece);
-        piece.setPosition(from);
-        piece.setMovedStatue(moved);
-        this.board.put(to,capturedPiece);
-        if(capturedPiece != null){
-            capturedPiece.setPosition(to);
+        if (captured != null) {
+            getPieces(captured.getTeam()).remove(captured);
         }
 
+        board.put(from, null);
+        piece.setPosition(to);
+        piece.setMovedStatue(true);
+        board.put(to, piece);
+    }
+
+    public void applyUndo(Position from, Position to, boolean moved, Piece capturedPiece) {
+        Piece piece = board.get(to);
+        this.board.put(from, piece);
+        piece.setPosition(from);
+        piece.setMovedStatue(moved);
+
+        this.board.put(to, capturedPiece);
+        if (capturedPiece != null) {
+            capturedPiece.setPosition(to);
+            getPieces(capturedPiece.getTeam()).add(capturedPiece);
+        }
     }
 
     public Piece getPiece(Position position) {
@@ -126,10 +139,7 @@ public class Board {
 
 
     public List<Piece> getPieces(Team team) {
-        return board.values().stream()
-                .filter(Objects::nonNull)
-                .filter(piece -> piece.getTeam() == team)
-                .collect(Collectors.toList());
+        return Team.BLACK==team?bPieces:wPieces;
     }
 
 }

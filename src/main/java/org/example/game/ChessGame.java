@@ -3,6 +3,7 @@ package org.example.game;
 import org.example.game.entities.*;
 import org.example.game.exceptions.GameOverException;
 import org.example.game.exceptions.NeedPromotionException;
+import org.example.game.gamestate.Board;
 import org.example.game.gamestate.GameState;
 import org.example.game.ruleset.MoveGenerator;
 import org.example.game.ruleset.RuleValidator;
@@ -20,6 +21,12 @@ public class ChessGame implements Game {
 
     public ChessGame(){
         gameState = new GameState();
+        moveGenerator = new MoveGenerator(gameState);
+        ruleValidator = new RuleValidator(gameState,moveGenerator);
+    }
+
+    public ChessGame(Board board){
+        gameState = new GameState(board);
         moveGenerator = new MoveGenerator(gameState);
         ruleValidator = new RuleValidator(gameState,moveGenerator);
     }
@@ -177,6 +184,10 @@ public class ChessGame implements Game {
 
     public List<Piece> getPieces(Team team){
         return gameState.getBoard().getPieces(team);
+    }
+
+    public long getCurrentHash(){
+        return gameState.getZobristHash().getCurrentHash();
     }
 
 }
